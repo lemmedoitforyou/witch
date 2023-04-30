@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 
 namespace cardgame
 {
+    public enum Suit
+    {
+        Clubs,
+        Diamonds,
+        Spades,
+        Hearts
+    }
     public class Card
     {
-        public string Suit { get; set; }
-        public string Value { get; set; }
-
-        public Card(string suit, string value)
+        public Suit Suit { get; set; }
+        public int Value { get; set; }
+        public Card(Suit suit, int value)
         {
             Suit = suit;
             Value = value;
         }
-
         public override string ToString()
         {
             return $"{Value} of {Suit}";
