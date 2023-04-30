@@ -37,11 +37,7 @@ namespace cardgame
             {
                 foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                 {
-                    cards.Enqueue(new Card()
-                    {
-                        Suit = suit,
-                        Value = i,
-                    });
+                    cards.Enqueue(new Card(suit, i));
                 }
             }
             return Shuffle(cards);
