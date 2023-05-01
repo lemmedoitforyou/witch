@@ -10,13 +10,32 @@ namespace cardgame
     {
         private List<Card> cards = new List<Card>();
 
-        public Deck()
+        public Deck(int numberOfPlayers)
         {
-            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+            if (numberOfPlayers >= 4)
             {
+                cards = new List<Card>();
                 foreach (Rank rank in Enum.GetValues(typeof(Rank)))
                 {
-                    cards.Add(new Card(suit, rank));
+                    foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+                    {
+                        cards.Add(new Card(suit, rank));
+                    }
+                }
+            }
+            else
+            {
+                cards = new List<Card>();
+                foreach (Rank rank in Enum.GetValues(typeof(Rank)))
+                {
+                    if (rank <= Rank.Six)
+                    {
+                        continue;
+                    }
+                    foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+                    {
+                        cards.Add(new Card(suit, rank));
+                    }
                 }
             }
         }
