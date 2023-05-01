@@ -51,11 +51,31 @@ namespace cardgame
                 }
                 if (input != "-1")
                 {
-                    Console.Write("Введіть номер карт, які ви хочете скинути:");
-                    int index1 = int.Parse(Console.ReadLine());
-                    int index2 = int.Parse(Console.ReadLine());
+                    bool isCorrect;
+                    int index1;
+                    int index2;
+                    do {
+                        Console.Write("Введіть номер карт, які ви хочете скинути(спочатку карту з меншим номером):");
+                        index1 = int.Parse(Console.ReadLine());
+                        index2 = int.Parse(Console.ReadLine());
+                
+                        if (currentPlayer.Hand[index1].Rank != currentPlayer.Hand[index2].Rank)
+                        {
+                            Console.WriteLine("Карти мають бути однакового рангу, спробуйте знову");
+                            isCorrect = false;
+                        }
+                        else if (currentPlayer.Hand[index1].Suit == Suit.Spades && currentPlayer.Hand[index1].Rank == Rank.Queen || currentPlayer.Hand[index2].Suit == Suit.Spades && currentPlayer.Hand[index2].Rank == Rank.Queen)
+                        {
+                            Console.WriteLine("Не можна скидати пікову даму, або вона наведе порчу, спробуйте знову");
+                            isCorrect = false;
+                        }
+                        else
+                        {
+                            isCorrect = true;
+                        }
+                    }while (isCorrect == false);
                     currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
-                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2] });
+                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2 - 1] });
                 }
 
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
