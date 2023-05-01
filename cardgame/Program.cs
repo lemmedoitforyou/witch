@@ -4,7 +4,12 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            Console.Write("Введіть кількість гравців: ");
+            int numPlayers = int.Parse(Console.ReadLine());
+            Game game = new Game(numPlayers);
+            game.Start();
         }
     }
 }

@@ -6,25 +6,47 @@ using System.Threading.Tasks;
 
 namespace cardgame
 {
+    // зробити можливість зміни кількості карт від 32 до 52 в залежності від кількості гравців
     public enum Suit
     {
-        Clubs,
+        Hearts,
         Diamonds,
-        Spades,
-        Hearts
+        Clubs,
+        Spades
     }
+
+    public enum Rank
+    {
+        Two = 2,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight,
+        Nine,
+        Ten,
+        Jack,
+        Queen,
+        King,
+        Ace
+    }
+
     public class Card
     {
         public Suit Suit { get; set; }
-        public int Value { get; set; }
-        public Card(Suit suit, int value)
+        public Rank Rank { get; set; }
+
+        public Card(Suit suit, Rank rank)
         {
             Suit = suit;
-            Value = value;
+            Rank = rank;
         }
+
         public override string ToString()
         {
-            return $"{Value} of {Suit}";
+            return $"{Suit} - {Rank}" ;
         }
     }
+
 }

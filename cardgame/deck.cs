@@ -6,41 +6,44 @@ using System.Threading.Tasks;
 
 namespace cardgame
 {
-    public static class DeckCreator
+    public class Deck
     {
+        private List<Card> cards = new List<Card>();
 
-        private static Queue<Card> Shuffle(Queue<Card> cards)
+        public Deck()
         {
-            List<Card> transformedCards = cards.ToList();
-            Random r = new Random(DateTime.Now.Millisecond);
-            for (int n = transformedCards.Count - 1; n > 0; --n)
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
             {
-                int k = r.Next(n + 1);
-
-                Card temp = transformedCards[n];
-                transformedCards[n] = transformedCards[k];
-                transformedCards[k] = temp;
-            }
-
-            Queue<Card> shuffledCards = new Queue<Card>();
-            foreach (var card in transformedCards)
-            {
-                shuffledCards.Enqueue(card);
-            }
-
-            return shuffledCards;
-        }
-        public static Queue<Card> CreateCards()
-        {
-            Queue<Card> cards = new Queue<Card>();
-            for (int i = 2; i <= 14; i++)
-            {
-                foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+                foreach (Rank rank in Enum.GetValues(typeof(Rank)))
                 {
-                    cards.Enqueue(new Card(suit, i));
+                    cards.Add(new Card(suit, rank));
                 }
             }
-            return Shuffle(cards);
+        }
+
+        public List<Card> Cards
+        {
+            get { return cards; }
+        }
+
+        public void Shuffle()
+        {
+            Random random = new Random();
+            for (int i = 0; i < cards.Count; i++)
+            {
+                int j = random.Next(i, cards.Count);
+                Card temp = cards[i];
+                cards[i] = cards[j];
+                cards[j] = temp;
+            }
+        }
+
+        public List<Card> Deal(int numCards)
+        {
+            List<Card> hand = cards.GetRange(0, numCards);
+            cards.RemoveRange(0, numCards);
+            return hand;
         }
     }
+
 }
