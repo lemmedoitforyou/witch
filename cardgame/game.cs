@@ -40,19 +40,23 @@ namespace cardgame
                 Console.WriteLine($"Зараз черга гравця: {currentPlayer.Name}");
                 PrintAllCards(currentPlayer);
 
-                Console.Write("Введіть «1», щоб спочатку взяти картку, в іншому разі одразу перейти до скидання карт:");
+                Console.Write("Введіть '1', щоб спочатку взяти картку, в іншому разі одразу перейти до скидання карт:");
                 string input = Console.ReadLine();
                 if (input == "1")
                 {
                     currentPlayer.DrawCard(players[(currentPlayerIndex + 1) % players.Count]);
                     PrintAllCards(currentPlayer);
+                    Console.Write("Введіть '-1', щоб пропустити хід:");
+                    input = Console.ReadLine();
                 }
-                Console.WriteLine("Введіть номер карт, які ви хочете скинути:"); // зробити можливіть пропустити хід
-
-                int index1 = int.Parse(Console.ReadLine());
-                int index2 = int.Parse(Console.ReadLine());
-                currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
-                currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2] });
+                if (input != "-1")
+                {
+                    Console.Write("Введіть номер карт, які ви хочете скинути:");
+                    int index1 = int.Parse(Console.ReadLine());
+                    int index2 = int.Parse(Console.ReadLine());
+                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
+                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2] });
+                }
 
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
             }
@@ -67,6 +71,7 @@ namespace cardgame
             {
                 Console.WriteLine($"{i}: {player.Hand[i]}");
             }
+            Console.WriteLine();
         }
 
         private void DealCards()

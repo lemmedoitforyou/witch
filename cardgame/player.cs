@@ -18,8 +18,14 @@ namespace cardgame
 
         public void DrawCard(Player other)
         {
-            Hand.Add(other.Hand[0]); // зробити рандом
-            other.Hand.RemoveAt(0);
+
+            if (other.Hand.Count > 0)
+            {
+                Random rand = new Random();
+                int randomIndex = rand.Next(0, other.Hand.Count);
+                Hand.Add(other.Hand[randomIndex]);
+                other.Hand.RemoveAt(randomIndex);
+            }
         }
 
         public void Discard(List<Card> cards)
