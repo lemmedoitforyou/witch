@@ -15,7 +15,7 @@ namespace cardgame
 
         public Game(int numPlayers)
         {
-            deck = new Deck();
+            deck = new Deck(numPlayers);
             deck.Shuffle();
 
             players = new List<Player>();
@@ -40,43 +40,19 @@ namespace cardgame
                 Console.WriteLine($"Зараз черга гравця: {currentPlayer.Name}");
                 PrintAllCards(currentPlayer);
 
-                Console.Write("Введіть '1', щоб спочатку взяти картку, в іншому разі одразу перейти до скидання карт:");
+                Console.Write("Введіть «1», щоб спочатку взяти картку, в іншому разі одразу перейти до скидання карт:");
                 string input = Console.ReadLine();
                 if (input == "1")
                 {
                     currentPlayer.DrawCard(players[(currentPlayerIndex + 1) % players.Count]);
                     PrintAllCards(currentPlayer);
-                    Console.Write("Введіть '-1', щоб пропустити хід:");
-                    input = Console.ReadLine();
                 }
-                if (input != "-1")
-                {
-                    bool isCorrect;
-                    int index1;
-                    int index2;
-                    do {
-                        Console.Write("Введіть номер карт, які ви хочете скинути(спочатку карту з меншим номером):");
-                        index1 = int.Parse(Console.ReadLine());
-                        index2 = int.Parse(Console.ReadLine());
-                
-                        if (currentPlayer.Hand[index1].Rank != currentPlayer.Hand[index2].Rank)
-                        {
-                            Console.WriteLine("Карти мають бути однакового рангу, спробуйте знову");
-                            isCorrect = false;
-                        }
-                        else if (currentPlayer.Hand[index1].Suit == Suit.Spades && currentPlayer.Hand[index1].Rank == Rank.Queen || currentPlayer.Hand[index2].Suit == Suit.Spades && currentPlayer.Hand[index2].Rank == Rank.Queen)
-                        {
-                            Console.WriteLine("Не можна скидати пікову даму, або вона наведе порчу, спробуйте знову");
-                            isCorrect = false;
-                        }
-                        else
-                        {
-                            isCorrect = true;
-                        }
-                    }while (isCorrect == false);
-                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
-                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2 - 1] });
-                }
+                Console.WriteLine("Введіть номер карт, які ви хочете скинути (починаючи з меншого індексу карти):"); // зробити можливіть пропустити хід
+
+                int index1 = int.Parse(Console.ReadLine());
+                int index2 = int.Parse(Console.ReadLine());
+                currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
+                currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2] });
 
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
             }
@@ -91,7 +67,6 @@ namespace cardgame
             {
                 Console.WriteLine($"{i}: {player.Hand[i]}");
             }
-            Console.WriteLine();
         }
 
         private void DealCards()
