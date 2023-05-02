@@ -46,13 +46,38 @@ namespace cardgame
                 {
                     currentPlayer.DrawCard(players[(currentPlayerIndex + 1) % players.Count]);
                     PrintAllCards(currentPlayer);
+                    Console.Write("Введіть '-1', щоб пропустити хід:");
+                    input = Console.ReadLine();
                 }
-                Console.WriteLine("Введіть номер карт, які ви хочете скинути (починаючи з меншого індексу карти):"); // зробити можливіть пропустити хід
+                if (input != "-1")
+                {
+                    bool isCorrect;
+                    int index1;
+                    int index2;
+                    do
+                    {
+                        Console.Write("Введіть номер карт, які ви хочете скинути(спочатку карту з меншим номером):");
+                        index1 = int.Parse(Console.ReadLine());
+                        index2 = int.Parse(Console.ReadLine());
 
-                int index1 = int.Parse(Console.ReadLine());
-                int index2 = int.Parse(Console.ReadLine());
-                currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
-                currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2] });
+                        if (currentPlayer.Hand[index1].Rank != currentPlayer.Hand[index2].Rank)
+                        {
+                            Console.WriteLine("Карти мають бути однакового рангу, спробуйте знову");
+                            isCorrect = false;
+                        }
+                        else if (currentPlayer.Hand[index1].Suit == Suit.Spades && currentPlayer.Hand[index1].Rank == Rank.Queen || currentPlayer.Hand[index2].Suit == Suit.Spades && currentPlayer.Hand[index2].Rank == Rank.Queen)
+                        {
+                            Console.WriteLine("Не можна скидати пікову даму, або вона наведе порчу, спробуйте знову");
+                            isCorrect = false;
+                        }
+                        else
+                        {
+                            isCorrect = true;
+                        }
+                    } while (isCorrect == false);
+                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
+                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2 - 1] });
+                }
 
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
             }
@@ -81,13 +106,21 @@ namespace cardgame
 
         private bool IsGameOver()
         {
+            int count1 = 0;
+
             foreach (Player player in players)
             {
-                if (player.Hand.Count == 0)
+                
+                if (player.Hand.Count != 0)
                 {
-                    return true;
-                }
+                    ++count1;
+                }              
             }
+            if (count1 == 1)
+            {
+                return true;
+            }
+                  
             return false;
         }
 
@@ -105,19 +138,22 @@ namespace cardgame
 
         private void DisplayWinner()
         {
-            Player winner = null;
+            Player lox = null;
+            int count1 = 0;
+
             foreach (Player player in players)
             {
-                if (player.Hand.Count == 0)
+
+                if (player.Hand.Count != 0)
                 {
-                    winner = player;
-                    break;
+                    ++count1;
+                    lox = player;
                 }
             }
-
-            Console.WriteLine($"Кінець гри! Виграє гравець: {winner.Name}!");
+            if (count1 == 1)
+            {
+                Console.WriteLine($"Кінець гри! Програє: {lox.Name}!");
+            }
         }
-
     }
-
 }
