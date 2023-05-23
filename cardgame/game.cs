@@ -84,6 +84,46 @@ namespace cardgame
 
             DisplayWinner();
         }
+        public void CumModelGame()
+        {
+            DealCards();
+            while(!IsGameOver())
+            {
+                DisplayGameState();
+                Player currentPlayer = players[currentPlayerIndex];
+                Console.WriteLine($"Зараз черга гравця: {currentPlayer.Name}");
+                PrintAllCards(currentPlayer);
+                int index1 = 0;
+                int index2 = 0;
+                bool isFinded = false;
+                for (int i = 0; i < players[currentPlayerIndex].Hand.Count; i++)
+                {
+                    for (int j = 1; j< players[currentPlayerIndex].Hand.Count;j++)
+                    {
+                        
+                        if(players[currentPlayerIndex].Hand[i].Rank == players[currentPlayerIndex].Hand[j].Rank &&( (players[currentPlayerIndex].Hand[i].Suit != Suit.Spades && players[currentPlayerIndex].Hand[i].Rank != Rank.Queen) || (players[currentPlayerIndex].Hand[j].Suit != Suit.Spades && players[currentPlayerIndex].Hand[j].Rank != Rank.Queen)))
+                        {
+                            index1 = i;
+                            index2 = j;
+                            isFinded = true;
+                            break;
+                        }
+                    }
+                }
+                if (isFinded)
+                {
+                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index1] });
+                    currentPlayer.Discard(new List<Card> { currentPlayer.Hand[index2 - 1] });
+                    
+                }
+                else
+                {
+                    
+                }
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
+            }
+            DisplayWinner();
+        }
 
         private void PrintAllCards(Player player)
         {
